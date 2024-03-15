@@ -49,10 +49,7 @@ public class Board {
 
     private void play() {
         boolean endGame = false;
-        while (!endGame) {
-            if (room == 21) {
-                endGame = true;
-            }
+        while (!endGame || room == 21) {
             int[] pCoords = new int[2];
             ArrayList<int[]> eCoords = new ArrayList<int[]>();
             printBoard();
@@ -61,11 +58,17 @@ public class Board {
                 for (Shuimen enemy : enemies) {
                     enemy.move();
                     eCoords.add(enemy.getCoords());
+                    if (enemy.getCoords() == pCoords) {
+                        endGame = true;
+                    }
                 }
             }
 
 
         }
+        System.out.println("\"Noo, get away from me!\"");
+        System.out.println("\\033[3mThe Shuimen walks to the trembling robot and raises a fist." +
+                "\nThe robot could only scream as its circuits fry upon contact with the Shuimen's watery attacks.\\033[0m");
     }
 
     private void end() {
