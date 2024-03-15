@@ -84,7 +84,7 @@ public class Board {
         try {
             Thread.sleep(ms);
         } catch (Exception e) {
-            System.out.println("Error occured");
+            System.out.println("Error occurred");
         }
     }
 }
