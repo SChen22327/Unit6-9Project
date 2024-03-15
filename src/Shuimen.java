@@ -10,11 +10,16 @@ public class Shuimen extends Space {
         setCoords(coords);
         nextMoves = new ArrayList<int[]>();
     }
-    public void move(String[][] board) {
+    public boolean move() {
+        nextMoves();
         int i = (int) (Math.random() * nextMoves.size());
         int[] coordPair = nextMoves.get(i);
-        coords[0] = coordPair[0];
-        coords[1] = coordPair[1];
+        setCoords(coordPair);
+        return true;
+    }
+    public void setCoords(int[] newC) {
+        coords[0] = newC[0];
+        coords[1] = newC[1];
     }
     private void nextMoves() {
         if (coords[0] == 0) {
@@ -26,7 +31,7 @@ public class Shuimen extends Space {
                 nextMoves.add(new int[]{0, coords[1] + 1});
                 nextMoves.add(new int[]{1, coords[1]});
             }
-        } else if (coords[0] == 5) {
+        } else if (coords[0] == 4) {
             if (coords[1] == 0) {
                 nextMoves.add(new int[]{5, 1});
                 nextMoves.add(new int[]{4, 0});
@@ -42,10 +47,7 @@ public class Shuimen extends Space {
             nextMoves.add(new int[]{coords[0] - 1, coords[1]});
         }
     }
-    public void setCoords(int[] newC) {
-        coords[0] = newC[0];
-        coords[1] = newC[1];
-    }
+
     public int[] getCoords() {
         return coords;
     }
