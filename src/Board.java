@@ -9,7 +9,7 @@ public class Board {
     public Board() {
         difficulty = 1;
         room = 1;
-        player = new Robot("⚡");
+        player = new Robot("⚇");
         enemies = new ArrayList<Shuimen>();
         createBoard();
         play();
@@ -20,7 +20,7 @@ public class Board {
         board = new Space[5][12];
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
-                board[i][j] = new Space("☐");
+                board[i][j] = new Space("☐");;
             }
         }
 
@@ -32,9 +32,9 @@ public class Board {
         }
 
         for (int i = 0; i < difficulty; i++) {
-            int row = (int) (Math.random() * 6);
+            int row = (int) (Math.random() * 5);
             int col = (int) (Math.random() * 6) + 6;
-            board[row][col] = new Shuimen("\uD83D\uDCA7", new int[]{row, col});
+            board[row][col] = new Shuimen("♚", new int[]{row, col});
             enemies.add((Shuimen) board[row][col]);
         }
     }
@@ -49,26 +49,30 @@ public class Board {
 
     private void play() {
         boolean endGame = false;
-        while (!endGame || room == 21) {
-            int[] pCoords = new int[2];
-            ArrayList<int[]> eCoords = new ArrayList<int[]>();
+        while (!endGame || room != 21) {
             printBoard();
+            int[] pOldCoords = player.getCoords();
             if (player.move()) {
-                pCoords = player.getCoords();
-                for (Shuimen enemy : enemies) {
+                int[] pCoords = player.getCoords();
+                for (int i = 0; i < enemies.size(); i++) {
+                    Shuimen enemy = enemies.get(i);
+                    int [] oldCoords = enemy.getCoords();
                     enemy.move();
-                    eCoords.add(enemy.getCoords());
                     if (enemy.getCoords() == pCoords) {
                         endGame = true;
+                    } else {
+                        board[oldCoords[0]][oldCoords[1]] = new Space("☐");;
+                        int[] eCoord = enemy.getCoords();
+                        board[eCoord[0]][eCoord[1]] = enemy;
                     }
                 }
+                board[pOldCoords[0]][pOldCoords[1]] = new Space("☐");;
+                board[pCoords[0]][pCoords[1]] = player;
             }
-
-
         }
         System.out.println("\"Noo, get away from me!\"");
-        System.out.println("\\033[3mThe Shuimen walks to the trembling robot and raises a fist." +
-                "\nThe robot could only scream as its circuits fry upon contact with the Shuimen's watery attacks.\\033[0m");
+        System.out.println("\033[3mThe Shuimen walks to the trembling robot and raises a fist." +
+                "\nThe robot could only scream as its circuits fry upon contact with the Shuimen's watery attacks.\033[0m");
     }
 
     private void end() {
