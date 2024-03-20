@@ -6,11 +6,13 @@ public class Board {
     private int room;
     private Robot player;
     private ArrayList<Shuimen> enemies;
+    int[] pOld;
     public Board() {
         difficulty = 1;
         room = 1;
         player = new Robot("⚇");
         enemies = new ArrayList<Shuimen>();
+        pOld = new int[2];
         createBoard();
         play();
         end();
@@ -51,22 +53,25 @@ public class Board {
         boolean endGame = false;
         while (!endGame || room != 21) {
             printBoard();
-            int[] pOldCoords = player.getCoords();
+            pOld[0] = player.getCoords()[0];
+            pOld[1] = player.getCoords()[1];
             if (player.move()) {
                 int[] pCoords = player.getCoords();
                 for (int i = 0; i < enemies.size(); i++) {
                     Shuimen enemy = enemies.get(i);
-                    int [] oldCoords = enemy.getCoords();
+                    int[] eOld = new int[2];
+                    eOld[0] = enemy.getCoords()[0];
+                    eOld[1] = enemy.getCoords()[1];
                     enemy.move();
-                    if (enemy.getCoords() == pCoords) {
+                    int[] eCoord = new int[]{enemy.getCoords()[0], enemy.getCoords()[1]};
+                    if (board[eCoord[0]][eCoord[1]] instanceof Robot) {
                         endGame = true;
-                    } else {
-                        board[oldCoords[0]][oldCoords[1]] = new Space("☐");;
-                        int[] eCoord = enemy.getCoords();
+                    } else if (!(board[eCoord[0]][eCoord[1]] instanceof Shuimen)){
+                        board[eOld[0]][eOld[1]] = new Space("☐");;
                         board[eCoord[0]][eCoord[1]] = enemy;
                     }
                 }
-                board[pOldCoords[0]][pOldCoords[1]] = new Space("☐");;
+                board[pOld[0]][pOld[1]] = new Space("☐");;
                 board[pCoords[0]][pCoords[1]] = player;
             }
         }

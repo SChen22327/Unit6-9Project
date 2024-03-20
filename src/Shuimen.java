@@ -8,7 +8,6 @@ public class Shuimen extends Space {
         super(symbol);
         this.coords = new int[2];
         setCoords(coords);
-        nextMoves = new ArrayList<int[]>();
     }
     public boolean move() {
         nextMoves();
@@ -22,10 +21,14 @@ public class Shuimen extends Space {
         coords[1] = newC[1];
     }
     private void nextMoves() {
+        nextMoves = new ArrayList<int[]>();
         if (coords[0] == 0) {
             if (coords[1] == 0) {
                 nextMoves.add(new int[]{0, 1});
                 nextMoves.add(new int[]{1, 0});
+            } else if (coords[1] == 11){
+                nextMoves.add(new int[]{0, 10});
+                nextMoves.add(new int[]{1, 11});
             } else {
                 nextMoves.add(new int[]{0, coords[1] - 1});
                 nextMoves.add(new int[]{0, coords[1] + 1});
@@ -33,18 +36,31 @@ public class Shuimen extends Space {
             }
         } else if (coords[0] == 4) {
             if (coords[1] == 0) {
-                nextMoves.add(new int[]{5, 1});
-                nextMoves.add(new int[]{4, 0});
+                nextMoves.add(new int[]{4, 1});
+                nextMoves.add(new int[]{3, 0});
+            } else if (coords[1] == 11) {
+                nextMoves.add(new int[]{4, 10});
+                nextMoves.add(new int[]{3, 11});
             } else {
-                nextMoves.add(new int[]{5, coords[1] - 1});
-                nextMoves.add(new int[]{5, coords[1] + 1});
-                nextMoves.add(new int[]{4, coords[1]});
+                nextMoves.add(new int[]{4, coords[1] - 1});
+                nextMoves.add(new int[]{4, coords[1] + 1});
+                nextMoves.add(new int[]{3, coords[1]});
             }
         } else {
-            nextMoves.add(new int[]{coords[0], coords[1] - 1});
-            nextMoves.add(new int[]{coords[0], coords[1] + 1});
-            nextMoves.add(new int[]{coords[0] + 1, coords[1]});
-            nextMoves.add(new int[]{coords[0] - 1, coords[1]});
+            if (coords[1] == 0) {
+                nextMoves.add(new int[]{coords[0], 1});
+                nextMoves.add(new int[]{coords[0] - 1, 0});
+                nextMoves.add(new int[]{coords[0] + 1, 0});
+            } else if (coords[1] == 11) {
+                nextMoves.add(new int[]{coords[0], 10});
+                nextMoves.add(new int[]{coords[0] - 1, 11});
+                nextMoves.add(new int[]{coords[0] + 1, 11});
+            } else {
+                nextMoves.add(new int[]{coords[0], coords[1] - 1});
+                nextMoves.add(new int[]{coords[0], coords[1] + 1});
+                nextMoves.add(new int[]{coords[0] - 1, coords[1]});
+                nextMoves.add(new int[]{coords[0] + 1, coords[1]});
+            }
         }
     }
 
