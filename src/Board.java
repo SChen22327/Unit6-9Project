@@ -6,18 +6,16 @@ public class Board {
     private int room;
     private Robot player;
     private ArrayList<Shuimen> enemies;
-    int[] pOld;
     public Board() {
         difficulty = 1;
         room = 0;
         player = new Robot("⚇");
-        enemies = new ArrayList<Shuimen>();
-        pOld = new int[2];
         play();
         end();
     }
 
     private void createBoard() {
+        enemies = new ArrayList<Shuimen>();
         board = new Space[5][12];
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
@@ -25,13 +23,14 @@ public class Board {
             }
         }
 
-        if (room % 5 == 1) {
+        if (room % 4 == 1) {
             difficulty++;
         }
         if (room == 1) {
             board[2][0] = player;
         } else {
             board[player.getLastRow()][0] = player;
+            player.setCoords(new int[]{player.getLastRow(), 0});
         }
 
         for (int i = 0; i < difficulty; i++) {
@@ -54,27 +53,14 @@ public class Board {
     private void play() {
         createBoard();
         boolean endGame = false;
-        while (!endGame || room != 21) {
+        while (!endGame && room != 21) {
             printBoard();
-            pOld[0] = player.getCoords()[0];
-            pOld[1] = player.getCoords()[1];
+            int[] pOld = new int[]{player.getCoords()[0], player.getCoords()[1]};
             if (player.move()) {
                 int[] pCoords = player.getCoords();
-                for (int i = 0; i < enemies.size(); i++) {
-                    Shuimen enemy = enemies.get(i);
-                    int[] eOld = new int[2];
-                    eOld[0] = enemy.getCoords()[0];
-                    eOld[1] = enemy.getCoords()[1];
-                    enemy.move();
-                    int[] eCoord = new int[]{enemy.getCoords()[0], enemy.getCoords()[1]};
-                    if (board[eCoord[0]][eCoord[1]] instanceof Robot) {
-                        endGame = true;
-                    } else if (!(board[eCoord[0]][eCoord[1]] instanceof Shuimen)){
-                        board[eOld[0]][eOld[1]] = new Space("☐");;
-                        board[eCoord[0]][eCoord[1]] = enemy;
-                    }
-                }
-                if (!(board[pCoords[0]][pCoords[1]] instanceof Door)) {
+                if (board[pCoords[0]][pCoords[1]] instanceof Shuimen) {
+                    endGame = true;
+                } else if (!(board[pCoords[0]][pCoords[1]] instanceof Door)) {
                     board[pOld[0]][pOld[1]] = new Space("☐");
                     board[pCoords[0]][pCoords[1]] = player;
                 } else {
@@ -82,6 +68,19 @@ public class Board {
                     room++;
                     createBoard();
                 }
+                for (int i = 0; i < enemies.size(); i++) {
+                    Shuimen enemy = enemies.get(i);
+                    int[] eOld = new int[]{enemy.getCoords()[0], enemy.getCoords()[1]};
+                    enemy.move();
+                    int[] eCoord = new int[]{enemy.getCoords()[0], enemy.getCoords()[1]};
+                    if (board[eCoord[0]][eCoord[1]] instanceof Robot) {
+                        endGame = true;
+                    } else if (!(board[eCoord[0]][eCoord[1]] instanceof Shuimen || board[eCoord[0]][eCoord[1]] instanceof Door)){
+                        board[eOld[0]][eOld[1]] = new Space("☐");;
+                        board[eCoord[0]][eCoord[1]] = enemy;
+                    }
+                }
+
             }
         }
         System.out.println("\"Noo, get away from me!\"");
@@ -99,6 +98,24 @@ public class Board {
         sleep(750);
         System.out.println("Final Score: " + player.getScore());
         System.out.println("Total Moves: " + player.getMoves());
+    }
+
+    private String nextArrow(int[] eOld, int[] eNew) {
+        int oldx = eOld[0];
+        int oldy = eOld[1];
+        int newx = eNew[0];
+        int newy = eNew[1];
+        if (newy == oldy - 1) {
+            return "↥";
+        } else if (newy == oldy + 1) {
+            return "↧";
+        } else if (newx == oldx - 1) {
+            return "↤";
+        } else if (newx == oldx + 1) {
+            return "↦";
+        } else {
+            return "☐";
+        }
     }
 
     private void sleep(int ms) {
