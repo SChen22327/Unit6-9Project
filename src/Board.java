@@ -13,7 +13,6 @@ public class Board {
         player = new Robot("⚇");
         enemies = new ArrayList<Shuimen>();
         pOld = new int[2];
-        createBoard();
         play();
         end();
     }
@@ -31,10 +30,12 @@ public class Board {
         }
         if (room == 1) {
             board[2][0] = player;
+        } else {
+            board[player.getLastRow()][0] = player;
         }
 
         for (int i = 0; i < difficulty; i++) {
-            int row = (int) (Math.random() * 5);
+            int row = (int) (Math.random() * 3) + 1;
             int col = (int) (Math.random() * 5) + 6;
             board[row][col] = new Shuimen("♚", new int[]{row, col});
             enemies.add((Shuimen) board[row][col]);
@@ -51,6 +52,7 @@ public class Board {
     }
 
     private void play() {
+        createBoard();
         boolean endGame = false;
         while (!endGame || room != 21) {
             printBoard();
