@@ -65,6 +65,7 @@ public class Board {
                     board[pCoords[0]][pCoords[1]] = player;
                 } else {
                     player.setLastRow(player.getCoords()[0]);
+                    Door.exit(player);
                     room++;
                     createBoard();
                 }
@@ -84,8 +85,10 @@ public class Board {
             }
         }
         System.out.println("\"Noo, get away from me!\"");
+        sleep(750);
         System.out.println("\033[3mThe Shuimen walks to the trembling robot and raises a fist." +
                 "\nThe robot could only scream as its circuits fry upon contact with the Shuimen's watery attacks.\033[0m");
+        sleep(1500);
     }
 
     private void end() {
@@ -98,24 +101,6 @@ public class Board {
         sleep(750);
         System.out.println("Final Score: " + player.getScore());
         System.out.println("Total Moves: " + player.getMoves());
-    }
-
-    private String nextArrow(int[] eOld, int[] eNew) {
-        int oldx = eOld[0];
-        int oldy = eOld[1];
-        int newx = eNew[0];
-        int newy = eNew[1];
-        if (newy == oldy - 1) {
-            return "↥";
-        } else if (newy == oldy + 1) {
-            return "↧";
-        } else if (newx == oldx - 1) {
-            return "↤";
-        } else if (newx == oldx + 1) {
-            return "↦";
-        } else {
-            return "☐";
-        }
     }
 
     private void sleep(int ms) {
