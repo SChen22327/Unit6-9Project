@@ -9,6 +9,12 @@ public class Robot extends Shuimen {
         lastRow = 2;
     }
 
+    public void setLastRow(int lr) {
+        lastRow = lr;
+    }
+    public int getLastRow() {
+        return lastRow;
+    }
     public int getScore() {
         return score;
     }

@@ -9,7 +9,7 @@ public class Board {
     int[] pOld;
     public Board() {
         difficulty = 1;
-        room = 1;
+        room = 0;
         player = new Robot("⚇");
         enemies = new ArrayList<Shuimen>();
         pOld = new int[2];
@@ -35,10 +35,11 @@ public class Board {
 
         for (int i = 0; i < difficulty; i++) {
             int row = (int) (Math.random() * 5);
-            int col = (int) (Math.random() * 6) + 6;
+            int col = (int) (Math.random() * 5) + 6;
             board[row][col] = new Shuimen("♚", new int[]{row, col});
             enemies.add((Shuimen) board[row][col]);
         }
+        board[(int) (Math.random() * 5)][11] = new Door("\uD83D\uDEAA");
     }
     private void printBoard() {
         for (Space[] row : board) {
@@ -71,8 +72,14 @@ public class Board {
                         board[eCoord[0]][eCoord[1]] = enemy;
                     }
                 }
-                board[pOld[0]][pOld[1]] = new Space("☐");;
-                board[pCoords[0]][pCoords[1]] = player;
+                if (!(board[pCoords[0]][pCoords[1]] instanceof Door)) {
+                    board[pOld[0]][pOld[1]] = new Space("☐");
+                    board[pCoords[0]][pCoords[1]] = player;
+                } else {
+                    player.setLastRow(player.getCoords()[0]);
+                    room++;
+                    createBoard();
+                }
             }
         }
         System.out.println("\"Noo, get away from me!\"");
