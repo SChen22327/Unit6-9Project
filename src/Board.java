@@ -103,6 +103,22 @@ public class Board {
         System.out.println("Total Moves: " + player.getMoves());
     }
 
+    private String arrow(int[] eOld, int[] eNew) {
+        int oldy = eOld[0];
+        int oldx = eOld[1];
+        int newy = eNew[0];
+        int newx = eNew[1];
+        if (newy == oldy - 1) {
+            return "🠉";
+        } else if (newy == oldy + 1) {
+            return "🠋";
+        } else if (newx == oldx - 1) {
+            return "🠈";
+        } else if (newx == oldx + 1) {
+            return "🠊";
+        }
+        return "☐";
+    }
     private void sleep(int ms) {
         try {
             Thread.sleep(ms);
