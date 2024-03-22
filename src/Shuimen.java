@@ -16,6 +16,7 @@ public class Shuimen extends Space {
         setCoords(coordPair);
         return true;
     }
+
     public void setCoords(int[] newC) {
         coords[0] = newC[0];
         coords[1] = newC[1];

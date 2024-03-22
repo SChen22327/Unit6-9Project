@@ -6,12 +6,12 @@ public class Robot extends Shuimen {
     private int lastRow;
     public Robot(String symbol) {
         super(symbol, new int[]{2, 0});
-        lastRow = 2;
     }
 
     public void setLastRow(int lr) {
         lastRow = lr;
     }
+
     public int getLastRow() {
         return lastRow;
     }
@@ -73,4 +73,5 @@ public class Robot extends Shuimen {
                 return false;
         }
     }
+
 }
