@@ -29,8 +29,14 @@ public class Board {
         if (room == 1) {
             board[2][0] = player;
         } else {
-            board[player.getLastRow()][0] = player;
-            player.setCoords(new int[]{player.getLastRow(), 0});
+            if (player.getRow()) {
+                board[player.getLastRow()][0] = player;
+                player.setCoords(new int[]{player.getLastRow(), 0});
+            }
+            if (player.getCol()) {
+                board[0][player.getLastCol()] = player;
+                player.setCoords(new int[]{0, player.getLastCol()});
+            }
         }
 
         for (int i = 0; i < difficulty; i++) {
@@ -43,7 +49,34 @@ public class Board {
             board[row][col] = new Shuimen("\u001B[34m♚\u001B[0m", new int[]{row, col});
             enemies.add((Shuimen) board[row][col]);
         }
-        board[(int) (Math.random() * 5)][11] = new Door("\uD83D\uDEAA");
+        int ran;
+        if ((int) (Math.random() * 2) + 1 == 1) {
+            ran = (int) (Math.random() * 5);
+            if (board[ran][11] instanceof Robot) {
+                while ((board[ran][11] instanceof Robot)) {
+                    ran = (int) (Math.random() * 5);
+                }
+            }
+            board[ran][11] = new Door("\uD83D\uDEAA");
+        } else {
+            if ((int) (Math.random() * 2) + 1 == 1) {
+                ran = (int) (Math.random() * 6) + 6;
+                if (board[0][ran] instanceof Robot) {
+                    while ((board[0][ran] instanceof Robot)) {
+                        ran = (int) (Math.random() * 6) + 6;
+                    }
+                }
+                board[0][(int) (Math.random() * 6) + 6] = new Door("\uD83D\uDEAA");
+            } else {
+                ran = (int) (Math.random() * 6) + 6;
+                if (board[4][ran] instanceof Robot) {
+                    while ((board[4][ran] instanceof Robot)) {
+                        ran = (int) (Math.random() * 6) + 6;
+                    }
+                }
+                board[4][(int) (Math.random() * 6) + 6] = new Door("\uD83D\uDEAA");
+            }
+        }
     }
     private void printBoard() {
         for (Space[] row : board) {
@@ -64,14 +97,20 @@ public class Board {
                 Shuimen enemy = enemies.get(i);
                 int[] eOld = new int[]{enemy.getCoords()[0], enemy.getCoords()[1]};
                 eOldCoords.add(eOld);
-                enemy.move();
-                int[] eCoord = new int[]{enemy.getCoords()[0], enemy.getCoords()[1]};
-                eCoords.add(eCoord);
-                while (board[eCoord[0]][eCoord[1]] instanceof Shuimen || board[eCoord[0]][eCoord[1]] instanceof Door || board[eCoord[0]][eCoord[1]] instanceof Arrow) {
-                    enemy.setCoords(eOld);
+                int[] eCoord;
+                if (enemy.getMoved()) {
                     enemy.move();
-                    eCoord = new int[]{enemy.getCoords()[0], enemy.getCoords()[1]};
-                    eCoords.set(i, eCoord);
+                    eCoord = new int[]{enemy.getNextCoords()[0], enemy.getNextCoords()[1]};
+                    eCoords.add(eCoord);
+                    while (board[eCoord[0]][eCoord[1]] instanceof Shuimen || board[eCoord[0]][eCoord[1]] instanceof Door || board[eCoord[0]][eCoord[1]] instanceof Arrow) {
+                        enemy.setCoords(eOld);
+                        enemy.move();
+                        eCoord = new int[]{enemy.getNextCoords()[0], enemy.getNextCoords()[1]};
+                        eCoords.set(i, eCoord);
+                    }
+                } else {
+                    eCoord = new int[]{enemy.getNextCoords()[0], enemy.getNextCoords()[1]};
+                    eCoords.add(eCoord);
                 }
                 board[eCoord[0]][eCoord[1]] = arrow(eOld, eCoord);
             }
@@ -82,7 +121,7 @@ public class Board {
                 if (board[pCoords[0]][pCoords[1]] instanceof Shuimen || board[pCoords[0]][pCoords[1]] instanceof Arrow) {
                     break;
                 } else if (board[pCoords[0]][pCoords[1]] instanceof Door) {
-                    player.setLastRow(player.getCoords()[0]);
+                    player.setLast();
                     Door.exit(player);
                     room++;
                     createBoard();
@@ -92,13 +131,17 @@ public class Board {
                     for (int i = 0; i < eCoords.size(); i++) {
                         int[] eOld = eOldCoords.get(i);
                         int[] eCoord = eCoords.get(i);
+                        Shuimen enemy = enemies.get(i);
+                        enemy.setCoords(eCoord);
+                        enemy.setMoved(true);
                         board[eOld[0]][eOld[1]] = new Space("☐");
-                        board[eCoord[0]][eCoord[1]] = enemies.get(i);
+                        board[eCoord[0]][eCoord[1]] = enemy;
                     }
                 }
             } else {
                 for (int i = 0; i < eOldCoords.size(); i++) {
                     enemies.get(i).setCoords(eOldCoords.get(i));
+                    enemies.get(i).setMoved(false);
                 }
                 for (int i = 0; i < board.length; i++) {
                     for (int j = 0; j < board[0].length; j++) {

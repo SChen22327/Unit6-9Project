@@ -4,16 +4,34 @@ public class Robot extends Shuimen {
     private int score;
     private int moves;
     private int lastRow;
+    private int lastCol;
+    private boolean row;
+    private boolean col;
     public Robot(String symbol) {
         super(symbol, new int[]{2, 0});
     }
-
-    public void setLastRow(int lr) {
-        lastRow = lr;
+    public void setLast() {
+        if (getCoords()[1] == 11) {
+            row = true;
+            col = false;
+            lastRow = getCoords()[0];
+        } else if (getCoords()[0] == 0 || getCoords()[0] == 4) {
+            col = true;
+            row = false;
+            lastCol = getCoords()[1];
+        }
     }
-
     public int getLastRow() {
         return lastRow;
+    }
+    public int getLastCol() {
+        return lastCol;
+    }
+    public boolean getRow() {
+        return row;
+    }
+    public boolean getCol() {
+        return col;
     }
     public int getScore() {
         return score;

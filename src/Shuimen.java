@@ -4,22 +4,39 @@ import java.util.ArrayList;
 public class Shuimen extends Space {
     private ArrayList<int[]> nextMoves;
     private int[] coords;
+    private int[] nextCoords;
+    private boolean moved;
     public Shuimen(String symbol, int[] coords) {
         super(symbol);
         this.coords = new int[2];
+        nextCoords = new int[2];
         setCoords(coords);
+        moved = true;
     }
     public boolean move() {
         nextMoves();
         int i = (int) (Math.random() * nextMoves.size());
         int[] coordPair = nextMoves.get(i);
-        setCoords(coordPair);
+        nextCoords[0] = coordPair[0];
+        nextCoords[1] = coordPair[1];
         return true;
     }
 
+    public void setMoved(boolean move) {
+        moved = move;
+    }
+    public boolean getMoved() {
+        return moved;
+    }
     public void setCoords(int[] newC) {
         coords[0] = newC[0];
         coords[1] = newC[1];
+    }
+    public int[] getCoords() {
+        return coords;
+    }
+    public int[] getNextCoords() {
+        return nextCoords;
     }
     private void nextMoves() {
         nextMoves = new ArrayList<int[]>();
@@ -63,9 +80,5 @@ public class Shuimen extends Space {
                 nextMoves.add(new int[]{coords[0] + 1, coords[1]});
             }
         }
-    }
-
-    public int[] getCoords() {
-        return coords;
     }
 }
