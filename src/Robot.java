@@ -8,7 +8,7 @@ public class Robot extends Shuimen {
     private boolean row;
     private boolean col;
     public Robot(String symbol) {
-        super(symbol, new int[]{2, 0});
+        super(symbol, new int[]{2, 0}, null);
     }
     public void setLast() {
         if (getCoords()[1] == 11) {

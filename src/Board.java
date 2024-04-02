@@ -9,7 +9,7 @@ public class Board {
     public Board() {
         difficulty = 1;
         room = 1;
-        player = new Robot("\u001B[33m⚇\u001B[0m");
+        player = new Robot("⚇");
         play();
         end();
     }
@@ -46,7 +46,7 @@ public class Board {
                 row = (int) (Math.random() * 3) + 1;
                 col = (int) (Math.random() * 5) + 6;
             }
-            board[row][col] = new Shuimen("\u001B[34m♚\u001B[0m", new int[]{row, col});
+            board[row][col] = new Shuimen("\u001B[34m♚\u001B[0m", new int[]{row, col}, player);
             enemies.add((Shuimen) board[row][col]);
         }
         int ran;
@@ -89,7 +89,11 @@ public class Board {
     private void printBoard() {
         for (Space[] row : board) {
             for (Space space : row) {
-                System.out.print(space.getSymbol());
+                if (space instanceof Robot) {
+                    System.out.print("\u001B[33m" + space.getSymbol() + "\u001B[0m");
+                } else {
+                    System.out.print(space.getSymbol());
+                }
             }
             System.out.println();
         }
@@ -110,7 +114,7 @@ public class Board {
                     enemy.move();
                     eCoord = new int[]{enemy.getNextCoords()[0], enemy.getNextCoords()[1]};
                     eCoords.add(eCoord);
-                    while (board[eCoord[0]][eCoord[1]] instanceof Shuimen || board[eCoord[0]][eCoord[1]] instanceof Door || board[eCoord[0]][eCoord[1]] instanceof Arrow) {
+                    while ((board[eCoord[0]][eCoord[1]] instanceof Shuimen && !(board[eCoord[0]][eCoord[1]] instanceof Robot)) || board[eCoord[0]][eCoord[1]] instanceof Door || board[eCoord[0]][eCoord[1]] instanceof Arrow) {
                         enemy.setCoords(eOld);
                         enemy.move();
                         eCoord = new int[]{enemy.getNextCoords()[0], enemy.getNextCoords()[1]};
@@ -120,7 +124,12 @@ public class Board {
                     eCoord = new int[]{enemy.getNextCoords()[0], enemy.getNextCoords()[1]};
                     eCoords.add(eCoord);
                 }
-                board[eCoord[0]][eCoord[1]] = arrow(eOld, eCoord);
+                if (board[eCoord[0]][eCoord[1]] instanceof Robot) {
+                    board[eCoord[0]][eCoord[1]] = new Space("\u001B[47m" + "\u001B[30m" + player.getSymbol() + "\u001B[30m" + "\u001B[0m");
+                    System.out.println("\u001B[31mCareful, you're on the enemy's path!\u001B[0m");
+                } else {
+                    board[eCoord[0]][eCoord[1]] = arrow(eOld, eCoord);
+                }
             }
             printBoard();
             int[] pOld = new int[]{player.getCoords()[0], player.getCoords()[1]};
