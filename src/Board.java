@@ -50,31 +50,39 @@ public class Board {
             enemies.add((Shuimen) board[row][col]);
         }
         int ran;
-        if ((int) (Math.random() * 2) + 1 == 1) {
+        if (player.getCol()) {
             ran = (int) (Math.random() * 5);
-            if (board[ran][11] instanceof Robot) {
-                while ((board[ran][11] instanceof Robot)) {
-                    ran = (int) (Math.random() * 5);
-                }
-            }
-            board[ran][11] = new Door("\uD83D\uDEAA");
-        } else {
             if ((int) (Math.random() * 2) + 1 == 1) {
-                ran = (int) (Math.random() * 6) + 6;
+                if (board[ran][11] instanceof Robot) {
+                    while ((board[ran][11] instanceof Robot)) {
+                        ran = (int) (Math.random() * 5);
+                    }
+                }
+                board[ran][11] = new Door("\uD83D\uDEAA");
+            } else {
+                if (board[ran][0] instanceof Robot) {
+                    while ((board[ran][0] instanceof Robot)) {
+                        ran = (int) (Math.random() * 5);
+                    }
+                }
+                board[ran][0] = new Door("\uD83D\uDEAA");
+            }
+        } else {
+            ran = (int) (Math.random() * 6) + 6;
+            if ((int) (Math.random() * 2) + 1 == 1) {
                 if (board[0][ran] instanceof Robot) {
                     while ((board[0][ran] instanceof Robot)) {
                         ran = (int) (Math.random() * 6) + 6;
                     }
                 }
-                board[0][(int) (Math.random() * 6) + 6] = new Door("\uD83D\uDEAA");
+                board[0][ran] = new Door("\uD83D\uDEAA");
             } else {
-                ran = (int) (Math.random() * 6) + 6;
                 if (board[4][ran] instanceof Robot) {
                     while ((board[4][ran] instanceof Robot)) {
                         ran = (int) (Math.random() * 6) + 6;
                     }
                 }
-                board[4][(int) (Math.random() * 6) + 6] = new Door("\uD83D\uDEAA");
+                board[4][ran] = new Door("\uD83D\uDEAA");
             }
         }
     }
