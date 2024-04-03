@@ -114,6 +114,7 @@ public class Board {
                     enemy.move();
                     eCoord = new int[]{enemy.getNextCoords()[0], enemy.getNextCoords()[1]};
                     eCoords.add(eCoord);
+                    //need to get shuimen not to overlap
                     while ((board[eCoord[0]][eCoord[1]] instanceof Shuimen && !(board[eCoord[0]][eCoord[1]] instanceof Robot)) || board[eCoord[0]][eCoord[1]] instanceof Door || board[eCoord[0]][eCoord[1]] instanceof Arrow) {
                         enemy.setCoords(eOld);
                         enemy.move();
@@ -124,10 +125,13 @@ public class Board {
                     eCoord = new int[]{enemy.getNextCoords()[0], enemy.getNextCoords()[1]};
                     eCoords.add(eCoord);
                 }
+                System.out.println("passed coords");
                 if (board[eCoord[0]][eCoord[1]] instanceof Robot) {
-                    board[eCoord[0]][eCoord[1]] = new Space("\u001B[47m" + "\u001B[30m" + player.getSymbol() + "\u001B[30m" + "\u001B[0m");
-                    System.out.println("\u001B[31mCareful, you're on the enemy's path!\u001B[0m");
+                    System.out.println("passed whatever this is");
+                    board[eCoord[0]][eCoord[1]] = new Robot("\u001B[47m" + "\u001B[30m" + player.getSymbol() + "\u001B[30m" + "\u001B[0m");
+                    System.out.println("\u001B[31mCareful, the enemy's hot on your trail!\u001B[0m");
                 } else {
+                    System.out.println("passesd else");
                     board[eCoord[0]][eCoord[1]] = arrow(eOld, eCoord);
                 }
             }
