@@ -114,12 +114,22 @@ public class Board {
                     enemy.move();
                     eCoord = new int[]{enemy.getNextCoords()[0], enemy.getNextCoords()[1]};
                     eCoords.add(eCoord);
+                    int fails = 0;
                     //need to get shuimen not to overlap
                     while ((board[eCoord[0]][eCoord[1]] instanceof Shuimen && !(board[eCoord[0]][eCoord[1]] instanceof Robot)) || board[eCoord[0]][eCoord[1]] instanceof Door || board[eCoord[0]][eCoord[1]] instanceof Arrow) {
+                        fails++;
+                        sleep(300);
+                        System.out.println("something");
                         enemy.setCoords(eOld);
-                        enemy.move();
-                        eCoord = new int[]{enemy.getNextCoords()[0], enemy.getNextCoords()[1]};
-                        eCoords.set(i, eCoord);
+                        if (fails == 12) {
+                            if (eOld[0] > 0) {
+
+                            }
+                        } else {
+                            enemy.move();
+                            eCoord = new int[]{enemy.getNextCoords()[0], enemy.getNextCoords()[1]};
+                            eCoords.set(i, eCoord);
+                        }
                     }
                 } else {
                     eCoord = new int[]{enemy.getNextCoords()[0], enemy.getNextCoords()[1]};

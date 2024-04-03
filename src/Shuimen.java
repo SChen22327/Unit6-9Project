@@ -3,6 +3,7 @@
 import java.util.ArrayList;
 public class Shuimen extends Space {
     private ArrayList<int[]> nextMoves;
+    private ArrayList<int[]> backupCoords;
     private int[] coords;
     private int[] nextCoords;
     private boolean moved;
@@ -22,6 +23,10 @@ public class Shuimen extends Space {
         nextCoords[0] = coordPair[0];
         nextCoords[1] = coordPair[1];
         return true;
+    }
+    public boolean moveBackup() {
+        backup();
+        int i = (int) (Math)
     }
 
     public void setMoved(boolean move) {
@@ -52,6 +57,49 @@ public class Shuimen extends Space {
             nextMoves.add(new int[]{coords[0], coords[1] + 1});
         } else if (coords[1] > pCoord[1]) {
             nextMoves.add(new int[]{coords[0], coords[1] - 1});
+        }
+    }
+    private void backup() {
+        backupCoords = new ArrayList<int[]>();
+        if (coords[0] == 0) {
+            if (coords[1] == 0) {
+                backupCoords.add(new int[]{0, 1});
+                backupCoords.add(new int[]{1, 0});
+            } else if (coords[1] == 11){
+                backupCoords.add(new int[]{0, 10});
+                backupCoords.add(new int[]{1, 11});
+            } else {
+                backupCoords.add(new int[]{0, coords[1] - 1});
+                backupCoords.add(new int[]{0, coords[1] + 1});
+                backupCoords.add(new int[]{1, coords[1]});
+            }
+        } else if (coords[0] == 4) {
+            if (coords[1] == 0) {
+                backupCoords.add(new int[]{4, 1});
+                backupCoords.add(new int[]{3, 0});
+            } else if (coords[1] == 11) {
+                backupCoords.add(new int[]{4, 10});
+                backupCoords.add(new int[]{3, 11});
+            } else {
+                backupCoords.add(new int[]{4, coords[1] - 1});
+                backupCoords.add(new int[]{4, coords[1] + 1});
+                backupCoords.add(new int[]{3, coords[1]});
+            }
+        } else {
+            if (coords[1] == 0) {
+                backupCoords.add(new int[]{coords[0], 1});
+                backupCoords.add(new int[]{coords[0] - 1, 0});
+                backupCoords.add(new int[]{coords[0] + 1, 0});
+            } else if (coords[1] == 11) {
+                backupCoords.add(new int[]{coords[0], 10});
+                backupCoords.add(new int[]{coords[0] - 1, 11});
+                backupCoords.add(new int[]{coords[0] + 1, 11});
+            } else {
+                backupCoords.add(new int[]{coords[0], coords[1] - 1});
+                backupCoords.add(new int[]{coords[0], coords[1] + 1});
+                backupCoords.add(new int[]{coords[0] - 1, coords[1]});
+                backupCoords.add(new int[]{coords[0] + 1, coords[1]});
+            }
         }
     }
 }
