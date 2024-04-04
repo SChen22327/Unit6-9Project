@@ -24,9 +24,12 @@ public class Shuimen extends Space {
         nextCoords[1] = coordPair[1];
         return true;
     }
-    public boolean moveBackup() {
+    public void moveBackup() {
         backup();
-        int i = (int) (Math)
+        int i = (int) (Math.random() * backupCoords.size());
+        int[] coordPair = backupCoords.get(i);
+        nextCoords[0] = coordPair[0];
+        nextCoords[1] = coordPair[1];
     }
 
     public void setMoved(boolean move) {
